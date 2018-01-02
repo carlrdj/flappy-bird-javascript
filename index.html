@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Flappy Bird</title>
+ 	<!-- Required meta tags -->
+ 	<link rel="icon" type="image/png" href="flappy-bird.png" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-12 text-center mt-3">
+				<h1>Flappy Bird</h1>
+			</div>
+
+			<div class="col-12 text-center mb-4"">
+				<h4 class="m-0 p-0">Puntuación: <span id="point">1</span>K</h4>				
+			</div>
+
+			<div class="col-12 text-center">
+				<canvas class="canvas" id="canvas" height="360px">
+				</canvas>
+			</div>
+
+			<div class="col-12 text-center mt-5 mb-3">
+				<button id="epilepticMode" onclick="changeEpilepticMode()" type="button" class="btn btn-secondary">
+					Modo epiléptico
+				</button>
+			</div>
+			<!--
+			<div class="col-12 text-center mt-5 mb-3">
+				<button id="difficultyModeEasy" onclick="changeDifficultyMode()" type="button" class="btn btn-secondary">
+					Modo epiléptico
+				</button>
+			</div>
+			-->
+			<div class="col-12 text-center mt-4">
+				Developed by: <a href="mailto:carl.rdj@gmail.com">carl.rdj@gmail.com</a>
+			</div>
+		</div>
+	</div>
+	<!-- jQuery first, then Tether, then Bootstrap JS. -->
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="script.js"></script>
+
+</body>
+</html>
