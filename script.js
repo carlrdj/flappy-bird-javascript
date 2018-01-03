@@ -1,6 +1,8 @@
 
 var showEpilepticMode = document.getElementById("epilepticMode");
 var canvas = document.getElementById("canvas");
+var showPoint = document.getElementById("point");
+var showRecord = document.getElementById("record");
 var mediaXs = window.matchMedia('(min-width: 440px)');
 var mediaSm = window.matchMedia('(min-width: 500)');
 var mediaMd = window.matchMedia('(min-width: 576px)');
@@ -13,7 +15,10 @@ mediaLg.addListener(mediaQuery);
 mediaXl.addListener(mediaQuery);
 
 var epilepticMode = true;
-
+var point = 0;
+if (localStorage.getItem("record") && localStorage.getItem("record") > 0) {
+  showRecord.innerHTML = "Mi record<br>" + localStorage.getItem("record") + " Ks";
+}
 changeEpilepticMode();
 function changeEpilepticMode(){
   if (epilepticMode) {
@@ -110,18 +115,12 @@ function transitionObstacles() {
   intervalTimeObstacles = setInterval(function () {
     reObstacles();
     draw();
+    if (obstacles[obstacles.length - 1][0] <= limit_area_x - Math.floor(limit_area_x/3)) {
+      generateObstacles();
+    }
     clearInterval(intervalTimeObstacles);
     transitionObstacles();
   }, durationTimeObstacles);
-}
-obstaclesGenerator();
-function obstaclesGenerator() { 
-  durationObstaclesGenerator = 1500;  
-  intervalObstaclesGenerator = setInterval(function () {
-    generateObstacles();
-    clearInterval(intervalObstaclesGenerator);
-    obstaclesGenerator();
-  }, durationObstaclesGenerator);
 }
 
 var img = new Image();
@@ -180,9 +179,9 @@ function generateObstacles(){
   var lessMin = birdHeight / 30;
   var lessSize = Math.floor(Math.random() * (lessMax - lessMin)) + lessMin;
   var topObstacleX =  limit_area_x ;
-  var topObstacleY =  center - (birdHeight - lessSize);
+  var topObstacleY =  Math.floor(center - (birdHeight - lessSize));
   var bottomObstacleX =  limit_area_x;
-  var bottomObstacleY =  center + (birdHeight - lessSize);
+  var bottomObstacleY =  Math.floor(center + (birdHeight - lessSize));
   var colorOne = colorObstacles[Math.floor(Math.random() * (colorObstacles.length - 0)) + 0];
   var colorTwo = colorObstacles[Math.floor(Math.random() * (colorObstacles.length - 0)) + 0];
   obstacles.push([topObstacleX, topObstacleY, bottomObstacleX, bottomObstacleY, colorOne]);
@@ -194,45 +193,25 @@ function reObstacles(){
     obstacles[i][2] = obstacles[i][2] - 1;
   }  
 }
-//collisionCheck(300, 100, 300, 200);
-function collisionCheck(tX, tY, bX, bY){
-  area.fillRect(tX, tY, obstacleWidth, -1000);
-  //Top
-  for (var i = tY; i > -birdHeight; i--) {    
-    console.log(verifyPointInCicle(tX, i));
-  }
-  for (var i = tX; i < tX+obstacleWidth; i++) {
-    console.log(verifyPointInCicle(i, tY));
-  }
-  //Bottom
-  for (var i = bY; i < limit_area_y + birdHeight; i++) {
-    console.log(verifyPointInCicle(bX, i));
-  }
-  for (var i = bX; i < bX+obstacleWidth; i++) {
-    console.log(verifyPointInCicle(i, bY));
-  }
 
-  /*
-  var xPoint = 110;
-  var yPoint = 133;
-
-  area.fillRect(xPoint, yPoint, 5, 5);
-
-  var xBird = 100;
-  var yBird = 100;
-  var radio = Math.floor(birdWidth/2);
-  var xCenter;
-  var yCenter;
-  xCenter = yCenter = Math.floor(xBird + birdWidth/2);
-  var resultA = Math.pow(xPoint - xCenter, 2) ;
-  var resultB = Math.pow(yPoint - yCenter, 2) ;
-  var resultEquation = Math.sqrt(resultA + resultB);
-  if (resultEquation <= radio) { 
-    console.log("Si."); 
-  } else { 
-    console.log("No"); 
+function collisionCheck(tY, bY){
+  if (tY < cordYFinal && bY > cordYFinal + birdHeight) { 
+  }else{
+    console.log('SE TE MURIO EL PAJARITO :( !!!!');
+    alert("Lograste " + point + "Ks\nSigue intentando");
+    localStorage.setItem("record", point);
+    if (localStorage.getItem("record") > 0) {
+      showRecord.innerHTML = "Mi record<br>" + localStorage.getItem("record") + " Ks";
+    }
+    arrow="";
+    cordYFinal = cordYInitial;
+    fall = speedfallInitial;
+    keyPress = false;
+    point = 0;
+    showPoint.innerHTML = "0";
+    obstacles = [];
+    generateObstacles();
   }
-  */
 }
 
 function verifyPointInCicle(){
@@ -254,8 +233,16 @@ function draw(){
     }else{
       color = obstacles[i][4];
     }
-    
-    //collisionCheck(obstacles[i][0], obstacles[i][1],obstacles[i][2], obstacles[i][3]);
+
+    if (cordXFinal + birdWidth > obstacles[i][0] || cordXFinal - obstacleWidth > obstacles[i][0]) {
+      collisionCheck(obstacles[i][1], obstacles[i][3]);
+    }
+    if (cordXFinal - birdWidth == obstacles[i][0]) {
+      showPoint.innerHTML = ++point;
+    }
+    if (obstacles[i][0] <= -obstacleWidth) {
+      obstacles.shift();
+    }
     area.fillStyle=color;
     area.fillRect(obstacles[i][0], obstacles[i][1], obstacleWidth, -1010);
     area.fillStyle=color;
